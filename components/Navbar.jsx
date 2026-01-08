@@ -1,0 +1,105 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import Button from './Button.jsx';
+
+function Navbar() {
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const navLinks = [
+        { label: 'Features', href: '#features' },
+        { label: 'Demo', href: '#demo' },
+        { label: 'Use Cases', href: '#usecases' },
+        { label: 'Enterprise', href: '#enterprise' },
+    ];
+
+    return (
+        <motion.header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'glass py-3' : 'py-5 bg-transparent'
+                }`}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+            <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                {/* Logo */}
+                <motion.a
+                    href="#"
+                    className="flex items-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-accent-500/20">
+                        <span className="text-white font-heading font-bold text-lg">O</span>
+                    </div>
+                    <span className="font-heading font-bold text-xl text-primary-900">OliAI</span>
+                </motion.a>
+
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link, index) => (
+                        <motion.a
+                            key={link.label}
+                            href={link.href}
+                            className="text-primary-600 hover:text-primary-900 font-medium transition-colors duration-300"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 * index }}
+                        >
+                            {link.label}
+                        </motion.a>
+                    ))}
+                </div>
+
+                {/* CTA Button */}
+                <div className="hidden md:block">
+                    <Button variant="secondary" size="sm">
+                        Get Started
+                    </Button>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button
+                    className="md:hidden text-primary-900 p-2"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </nav>
+
+            {/* Mobile Menu */}
+            <motion.div
+                className={`md:hidden absolute top-full left-0 right-0 glass shadow-xl ${isMobileMenuOpen ? 'block' : 'hidden'
+                    }`}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: isMobileMenuOpen ? 1 : 0, y: isMobileMenuOpen ? 0 : -20 }}
+            >
+                <div className="px-6 py-4 flex flex-col gap-4">
+                    {navLinks.map((link) => (
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            className="text-primary-600 hover:text-primary-900 font-medium py-2"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+                    <Button variant="primary" size="sm" className="mt-2 text-white">
+                        Get Started
+                    </Button>
+                </div>
+            </motion.div>
+        </motion.header>
+    );
+}
+
+export default Navbar;

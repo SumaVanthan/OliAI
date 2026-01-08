@@ -1,0 +1,225 @@
+/* OliAI Global Styles - Light Theme */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    background: #f8fafc;
+}
+
+/* Fresh Light Atmosphere */
+.atmosphere {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.08), transparent 25%);
+}
+
+/* Shimmer Button Effect (Light Mode Adjustment) */
+.shimmer-btn {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg,
+            #0f172a 0%,
+            #1e293b 25%,
+            #334155 50%,
+            #1e293b 75%,
+            #0f172a 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+.shimmer-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Glass Effect - Light Mode */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Modern Clean Card */
+.glass-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.02),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.05),
+        0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    border-color: #cbd5e1;
+}
+
+/* Spotlight Effect for Cards - Subtle Light interaction */
+.spotlight-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.spotlight-card::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    transform: translate(-50%, -50%);
+}
+
+.spotlight-card:hover::before {
+    opacity: 1;
+}
+
+/* Grid Pattern Background - Light */
+.grid-pattern {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* Skewed Highlight */
+.skewed-highlight {
+    position: relative;
+    display: inline-block;
+}
+
+.skewed-highlight::before {
+    content: '';
+    position: absolute;
+    inset: -2px -8px;
+    background: #dbeafe;
+    /* Blue-100 */
+    transform: skewX(-6deg);
+    z-index: -1;
+    border-radius: 4px;
+}
+
+/* Loading Screen - Light */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    z-index: 9999;
+}
+
+.loading-pulse {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    animation: loadingPulse 1s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Voice Blob Container */
+.voice-blob-container {
+    position: absolute;
+    bottom: -30%;
+    /* Lower it to make it less intrusive */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 90%;
+    pointer-events: none;
+}
+
+/* Chat Bubble Styles - Light */
+.chat-bubble {
+    max-width: 280px;
+    padding: 16px 20px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.chat-bubble-ai {
+    background: #eff6ff;
+    /* Blue-50 */
+    border: 1px solid #dbeafe;
+    color: #1e293b;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-bubble-user {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    border-bottom-right-radius: 4px;
+}
+
+/* Animation Utilities */
+.float-slow {
+    animation: float 8s ease-in-out infinite;
+}
+
+section {
+    position: relative;
+    z-index: 1;
+}
+
+/* Scrollbar Styling - Light */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
