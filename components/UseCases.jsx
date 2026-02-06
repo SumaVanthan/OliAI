@@ -1,133 +1,192 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Megaphone, Users, Wallet, Headphones, BarChart3, HelpCircle,
-    Target, Filter, Send, Gift, MessageSquare, RefreshCw
+    Building2, ShoppingCart, Heart, GraduationCap,
+    ArrowRight, CheckCircle2, TrendingUp, Clock, ShieldCheck
 } from 'lucide-react';
 
-const categories = [
-    { id: 'marketing', label: 'MARKETING & SALES', icon: Megaphone },
-    { id: 'customer', label: 'CUSTOMER EXPERIENCE', icon: Users },
-    { id: 'collections', label: 'COLLECTIONS', icon: Wallet },
-    { id: 'agent', label: 'AGENT ASSIST', icon: Headphones },
-    { id: 'analytics', label: 'ANALYTICS', icon: BarChart3 },
-    { id: 'helpdesk', label: 'INTERNAL HELP DESK', icon: HelpCircle }
+const industries = [
+    { id: 'bfsi', label: 'BFSI', icon: Building2, color: 'text-brand-600', bg: 'bg-brand-50' },
+    { id: 'ecommerce', label: 'E-commerce', icon: ShoppingCart, color: 'text-signal-600', bg: 'bg-signal-50' }, // Signal/Amber
+    { id: 'healthcare', label: 'Healthcare', icon: Heart, color: 'text-mint-600', bg: 'bg-mint-50' }, // Mint
+    { id: 'education', label: 'Education', icon: GraduationCap, color: 'text-sage-600', bg: 'bg-sage-50' } // Sage
 ];
 
-const useCasesByCategory = {
-    marketing: [
-        { icon: Target, title: 'Lead Generation & Qualification', description: 'Agentic AI captures, qualifies leads, schedules meetings automatically.', color: 'text-rose-600', bg: 'bg-rose-50' },
-        { icon: Filter, title: 'Funnel Drop-Off Recovery', description: 'Identify drop-offs, re-engage prospects via smart nudges, recover conversions.', color: 'text-violet-600', bg: 'bg-violet-50' },
-        { icon: Send, title: 'Campaign & New-Launch Outreach', description: 'Personalized outreach at scale; announce launches, nurture interest.', color: 'text-orange-600', bg: 'bg-orange-50' }
+const useCases = {
+    bfsi: [
+        {
+            title: "Loan Application Follow-up",
+            problem: "Leads drop off due to slow manual callbacks.",
+            solution: "AI calls applicants within seconds to qualify and collect missing documents.",
+            impact: "35% Increase in Conversions"
+        },
+        {
+            title: "Debt Collection",
+            problem: "Low recovery rates and high agent stress.",
+            solution: "Empathetic, persistent AI agents negotiate payment plans around the clock.",
+            impact: "2x Recovery Rate"
+        },
+        {
+            title: "Fraud Verification",
+            problem: "Customers wait too long to unblock cards.",
+            solution: "Instant automated calls to verify suspicious transactions with zero wait time.",
+            impact: "90% Cost Reduction"
+        }
     ],
-    customer: [
-        { icon: Users, title: 'Customer Onboarding', description: 'Guide new customers through setup with personalized voice assistance.', color: 'text-blue-600', bg: 'bg-blue-50' },
-        { icon: MessageSquare, title: 'Support Ticket Resolution', description: 'Resolve common issues instantly with intelligent voice responses.', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { icon: RefreshCw, title: 'Retention & Loyalty', description: 'Proactive outreach to at-risk customers with personalized offers.', color: 'text-purple-600', bg: 'bg-purple-50' }
+    ecommerce: [
+        {
+            title: "Abandoned Cart Recovery",
+            problem: "Email reminders have low open rates.",
+            solution: "AI calls customers to offer a discount or answer doubts about the product.",
+            impact: "20% Revenue Lift"
+        },
+        {
+            title: "COD Confirmation",
+            problem: "High RTO (Return to Origin) rates on fake orders.",
+            solution: "AI confirms availability and intent before shipping the order.",
+            impact: "40% Reduction in RTO"
+        },
+        {
+            title: "Post-Purchase Feedback",
+            problem: "Low response rates on email surveys.",
+            solution: "Engaging voice surveys that capture detailed sentiment and feedback.",
+            impact: "5x More Responses"
+        }
     ],
-    collections: [
-        { icon: Wallet, title: 'Payment Reminders', description: 'Automated, friendly reminders that maintain customer relationships.', color: 'text-green-600', bg: 'bg-green-50' },
-        { icon: RefreshCw, title: 'Payment Plan Setup', description: 'Negotiate and set up payment plans conversationally.', color: 'text-teal-600', bg: 'bg-teal-50' },
-        { icon: Target, title: 'Dispute Resolution', description: 'Handle billing disputes with empathy and efficiency.', color: 'text-amber-600', bg: 'bg-amber-50' }
+    healthcare: [
+        {
+            title: "Appointment Management",
+            problem: "No-shows cause revenue loss and scheduling gaps.",
+            solution: "AI calls to confirm, reschedule, or fill cancellation slots automatically.",
+            impact: "80% Fewer No-Shows"
+        },
+        {
+            title: "Post-Discharge Follow-up",
+            problem: "Nurses are overworked making routine check-up calls.",
+            solution: "AI checks on patient vitals and recovery progress, flagging risks to doctors.",
+            impact: "Saved 1000+ Nursing Hours"
+        },
+        {
+            title: "Patient Intake Screening",
+            problem: "Long wait times for basic symptom triage.",
+            solution: "AI collects initial symptoms and history before the doctor's visit.",
+            impact: "30% Faster Consultations"
+        }
     ],
-    agent: [
-        { icon: Gift, title: 'Upsell / Cross-Sell & Loyalty Promotions', description: 'Recommend relevant add-ons, trigger timed offers, boost loyalty.', color: 'text-pink-600', bg: 'bg-pink-50' },
-        { icon: MessageSquare, title: 'Survey / Feedback Collection', description: 'Collect structured feedback conversationally, summarize insights for teams.', color: 'text-cyan-600', bg: 'bg-cyan-50' },
-        { icon: RefreshCw, title: 'Renewals (Accounts & Subscriptions)', description: 'Proactive renewal engine that personalizes offers and nudges customers.', color: 'text-indigo-600', bg: 'bg-indigo-50' }
-    ],
-    analytics: [
-        { icon: BarChart3, title: 'Conversation Analytics', description: 'Deep insights into call quality, sentiment, and outcomes.', color: 'text-blue-600', bg: 'bg-blue-50' },
-        { icon: Target, title: 'Performance Dashboards', description: 'Real-time metrics on agent and AI performance.', color: 'text-violet-600', bg: 'bg-violet-50' },
-        { icon: Filter, title: 'Conversion Tracking', description: 'Track leads through the funnel with voice interaction data.', color: 'text-emerald-600', bg: 'bg-emerald-50' }
-    ],
-    helpdesk: [
-        { icon: HelpCircle, title: 'IT Support Automation', description: 'Password resets, ticket creation, and common IT queries.', color: 'text-slate-600', bg: 'bg-slate-100' },
-        { icon: Users, title: 'HR Self-Service', description: 'Leave requests, policy questions, and benefits inquiries.', color: 'text-rose-600', bg: 'bg-rose-50' },
-        { icon: MessageSquare, title: 'Knowledge Base Access', description: 'Voice-powered search through internal documentation.', color: 'text-amber-600', bg: 'bg-amber-50' }
+    education: [
+        {
+            title: "Admissions Counseling",
+            problem: "Counselors can't scale to handle thousands of inquiries.",
+            solution: "AI answers course FAQs, qualifies interest, and schedules campus visits.",
+            impact: "3x More Enrollments"
+        },
+        {
+            title: "Alumni Fundraising",
+            problem: "Generic emails get ignored by alumni.",
+            solution: "Personalized voice conversations to reconnect and solicit donations.",
+            impact: "2x Donor Engagement"
+        },
+        {
+            title: "Student Retention",
+            problem: "At-risk students are identified too late.",
+            solution: "Proactive check-ins to identify students struggling with attendance or grades.",
+            impact: "15% Lower Dropout Rate"
+        }
     ]
 };
 
 function UseCases() {
-    const [activeCategory, setActiveCategory] = useState('marketing');
+    const [activeTab, setActiveTab] = useState('bfsi');
+    const activeIndustry = industries.find(i => i.id === activeTab);
 
     return (
-        <section id="usecases" className="py-24 relative bg-white">
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Header */}
-                <motion.div
-                    className="text-center mb-12"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                >
-                    <h2 className="font-heading font-bold text-4xl md:text-5xl text-primary-900 mb-4">
-                        Deploy AI Agents Across Your Business
+        <section id="usecases" className="py-24 bg-primary-50 relative overflow-hidden">
+
+            {/* Background Elements */}
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-white/50 skew-x-12 pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="text-center mb-16">
+                    <span className="text-brand-600 font-semibold tracking-wide uppercase text-sm">Use Cases</span>
+                    <h2 className="font-heading font-bold text-4xl md:text-5xl text-primary-900 mt-2">
+                        Built for your industry
                     </h2>
-                </motion.div>
-
-                {/* Two Column Layout */}
-                <div className="grid lg:grid-cols-[240px_1fr] gap-8">
-                    {/* Left Sidebar - Category Tabs */}
-                    <motion.div
-                        className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        {categories.map((category) => {
-                            const Icon = category.icon;
-                            const isActive = activeCategory === category.id;
-                            return (
-                                <button
-                                    key={category.id}
-                                    onClick={() => setActiveCategory(category.id)}
-                                    className={`
-                                        flex items-center gap-3 px-4 py-3 rounded-xl text-left whitespace-nowrap
-                                        transition-all duration-200 shrink-0
-                                        ${isActive
-                                            ? 'bg-accent-50 text-accent-700 border-l-4 border-accent-500'
-                                            : 'text-primary-500 hover:bg-primary-50 border-l-4 border-transparent'
-                                        }
-                                    `}
-                                >
-                                    <Icon className={`w-4 h-4 ${isActive ? 'text-accent-600' : 'text-primary-400'}`} />
-                                    <span className="text-xs font-semibold tracking-wide">
-                                        {category.label}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </motion.div>
-
-                    {/* Right Content - Use Case Cards */}
-                    <div className="grid md:grid-cols-3 gap-4">
-                        <AnimatePresence mode="wait">
-                            {useCasesByCategory[activeCategory].map((useCase, index) => {
-                                const Icon = useCase.icon;
-                                return (
-                                    <motion.div
-                                        key={`${activeCategory}-${index}`}
-                                        className="bg-white border border-primary-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-primary-200 transition-all cursor-pointer"
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{ delay: index * 0.1 }}
-                                    >
-                                        <div className={`w-10 h-10 rounded-xl ${useCase.bg} flex items-center justify-center mb-4`}>
-                                            <Icon className={`w-5 h-5 ${useCase.color}`} />
-                                        </div>
-                                        <h3 className="font-heading font-semibold text-base text-primary-900 mb-2">
-                                            {useCase.title}
-                                        </h3>
-                                        <p className="text-primary-500 text-sm leading-relaxed">
-                                            {useCase.description}
-                                        </p>
-                                    </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
-                    </div>
                 </div>
+
+                {/* Tabs */}
+                <div className="flex flex-wrap justify-center gap-4 mb-12">
+                    {industries.map((ind) => {
+                        const Icon = ind.icon;
+                        const isActive = activeTab === ind.id;
+                        return (
+                            <button
+                                key={ind.id}
+                                onClick={() => setActiveTab(ind.id)}
+                                className={`
+                                    flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300
+                                    ${isActive
+                                        ? 'bg-primary-900 text-white shadow-lg scale-105'
+                                        : 'bg-white text-primary-600 hover:bg-white/80 hover:shadow-md border border-primary-200'}
+                                `}
+                            >
+                                <Icon className={`w-4 h-4 ${isActive ? 'text-brand-400' : ind.color}`} />
+                                {ind.label}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Cards */}
+                <div className="grid md:grid-cols-3 gap-6">
+                    <AnimatePresence mode="wait">
+                        {useCases[activeTab].map((item, index) => (
+                            <motion.div
+                                key={`${activeTab}-${index}`}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }}
+                                className="bg-white rounded-2xl p-8 border border-primary-100 shadow-sm hover:shadow-xl transition-shadow group relative overflow-hidden"
+                            >
+                                <div className="flex justify-between items-start gap-4 mb-4">
+                                    <h3 className="font-heading font-bold text-xl text-primary-900">
+                                        {item.title}
+                                    </h3>
+                                    <div className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${activeIndustry.bg} ${activeIndustry.color}`}>
+                                        {item.impact}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-xs font-bold text-primary-400 uppercase tracking-wider mb-1">
+                                            <Clock className="w-3 h-3" /> Problem
+                                        </h4>
+                                        <p className="text-primary-600 text-sm leading-relaxed">
+                                            {item.problem}
+                                        </p>
+                                    </div>
+
+                                    <div className="pt-4 border-t border-primary-50">
+                                        <h4 className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">
+                                            <CheckCircle2 className="w-3 h-3" /> Solution
+                                        </h4>
+                                        <p className="text-primary-800 font-medium text-sm leading-relaxed">
+                                            {item.solution}
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </div>
+
+                <div className="mt-12 text-center">
+                    <button className="inline-flex items-center gap-2 font-heading font-semibold text-primary-900 border-b-2 border-primary-900 pb-0.5 hover:text-brand-600 hover:border-brand-600 transition-colors">
+                        See all use cases <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+
             </div>
         </section>
     );

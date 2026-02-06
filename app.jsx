@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
-import Features from './components/Features.jsx';
+import Features from './components/Features.jsx'; // Capabilities
 import LiveDemo from './components/LiveDemo.jsx';
 import UseCases from './components/UseCases.jsx';
+import ROI from './components/ROI.jsx';
+import Trust from './components/Trust.jsx';
 import Integrations from './components/Integrations.jsx';
-import Security from './components/Security.jsx';
 import Footer from './components/Footer.jsx';
 
 function LoadingScreen() {
@@ -25,7 +26,7 @@ function LoadingScreen() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                 >
-                    OliAI
+                    Oli AI
                 </motion.p>
             </div>
         </motion.div>
@@ -62,9 +63,10 @@ function App() {
                             <Hero />
                             <Features />
                             <LiveDemo />
-                            <Integrations />
                             <UseCases />
-                            <Security />
+                            <ROI />
+                            <Trust />
+                            <Integrations />
                         </main>
                         <Footer />
                     </motion.div>
@@ -74,7 +76,6 @@ function App() {
     );
 }
 
-// Mount the app
 import { createRoot } from 'react-dom/client';
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);

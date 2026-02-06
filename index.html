@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OliAI - Voice AI That Feels Human</title>
+    <title>Oli AI - Enterprise Voice AI Platform</title>
     <meta name="description"
-        content="Next-generation Voice AI agent with fluid voice intelligence. Emotionally expressive and human-like conversations, not robotic bots.">
+        content="Enterprise-grade Voice AI that turns conversations into business outcomes. Automate millions of calls with human-like intelligence.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Tailwind CSS -->
@@ -22,28 +22,85 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        heading: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
                         body: ['Inter', 'sans-serif'],
                     },
                     colors: {
+                        brand: {
+                            DEFAULT: '#0F3D2E', // Deep Forest Green (Listening Green)
+                            50: '#F1FDF7',
+                            100: '#DCFCE9',
+                            200: '#A7D7C5',
+                            300: '#7FA99B',
+                            400: '#5E8C7D',
+                            500: '#0F3D2E', // Main
+                            600: '#0B2E23',
+                            700: '#08221A',
+                            800: '#061913',
+                            900: '#04110D',
+                        },
+                        sage: {
+                            DEFAULT: '#7FA99B', // Understanding Sage
+                            50: '#F5F9F7',
+                            100: '#EEF5F2', // Voice Demo Background
+                            200: '#E0E9E5',
+                            300: '#C2D6CE',
+                            400: '#7FA99B', // Main Sage
+                            500: '#5E8C7D',
+                            600: '#436B5F',
+                        },
+                        mint: {
+                            DEFAULT: '#A7D7C5', // Conversation Mint
+                            100: '#DCFCE9',
+                            200: '#A7D7C5', // Accent
+                            300: '#7FA99B',
+                        },
+                        signal: {
+                            DEFAULT: '#E6B566', // Warm Signal (Amber CTA)
+                            50: '#FDF7E7',
+                            100: '#FAEECF',
+                            200: '#F4DC9F',
+                            300: '#EDCA70',
+                            400: '#E6B566',
+                            500: '#D9A149', // Hover state
+                            600: '#B88232',
+                        },
+                        neutral: {
+                            900: '#1F2933', // Headings (Charcoal Dark)
+                            800: '#323F4B',
+                            700: '#4B5563', // Body Text (Slate Gray)
+                            600: '#64748B',
+                            500: '#9CA3AF', // Muted Text (Cool Gray)
+                            400: '#CBD5E1',
+                            300: '#E2E8F0',
+                            200: '#F1F5F9',
+                            100: '#F7F9F8', // Quiet Canvas (Background)
+                            50: '#F7F9F8', // Base
+                        },
+                        // Semantic Mapping
                         primary: {
-                            50: '#f8fafc',  // Main Bg
-                            100: '#f1f5f9', // Card Bg
-                            200: '#e2e8f0', // Borders
-                            300: '#cbd5e1', // Subtext Light
-                            400: '#94a3b8', // Subtext
-                            500: '#64748b', // Text Secondary
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a', // Text Primary
-                            950: '#020617',
+                            DEFAULT: '#0F3D2E', // Maps to Brand
+                            50: '#F7F9F8', // Canvas
+                            100: '#EEF5F2',
+                            200: '#E0E9E5',
+                            300: '#C2D6CE',
+                            400: '#7FA99B',
+                            500: '#5E8C7D',
+                            600: '#0F3D2E', // Main Text/Headings
+                            700: '#1F2933', // Darker Headings
+                            800: '#061913',
+                            900: '#1F2933', // Body Text override map
                         },
                         accent: {
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                            DEFAULT: '#A7D7C5',
+                            400: '#A7D7C5',
+                            500: '#E6B566', // Map CTA to semantic accent slot if needed
+                            600: '#E6B566',
+                        },
+                        status: {
+                            success: '#2E7D32',
+                            warning: '#E0A800',
+                            error: '#B91C1C',
                         }
                     },
                     animation: {
@@ -67,8 +124,8 @@
                         }
                     },
                     boxShadow: {
-                        'soft': '0 20px 40px -15px rgba(0, 0, 0, 0.05)',
-                        'glow': '0 0 20px -5px rgba(59, 130, 246, 0.3)'
+                        'soft': '0 20px 40px -15px rgba(15, 61, 46, 0.05)',
+                        'glow': '0 0 20px -5px rgba(167, 215, 197, 0.3)'
                     }
                 }
             }
@@ -79,7 +136,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="bg-primary-50 text-primary-900 font-body antialiased selection:bg-accent-500/20 selection:text-accent-700">
+<body class="bg-primary-50 text-neutral-900 font-body antialiased selection:bg-mint-200 selection:text-brand-900">
     <div id="root"></div>
     <script type="module" src="/app.jsx"></script>
 </body>

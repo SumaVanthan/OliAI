@@ -16,10 +16,10 @@ function Navbar() {
     }, []);
 
     const navLinks = [
-        { label: 'Features', href: '#features' },
-        { label: 'Demo', href: '#demo' },
+        { label: 'Capabilities', href: '#features' },
         { label: 'Use Cases', href: '#usecases' },
-        { label: 'Enterprise', href: '#enterprise' },
+        { label: 'Experience', href: '#demo' },
+        { label: 'Enterprise', href: '#security' },
     ];
 
     return (
@@ -37,10 +37,10 @@ function Navbar() {
                     className="flex items-center gap-2"
                     whileHover={{ scale: 1.02 }}
                 >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-accent-500/20">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
                         <span className="text-white font-heading font-bold text-lg">O</span>
                     </div>
-                    <span className="font-heading font-bold text-xl text-primary-900">OliAI</span>
+                    <span className="font-heading font-bold text-xl text-primary-900 tracking-tight">Oli AI</span>
                 </motion.a>
 
                 {/* Desktop Navigation */}
@@ -49,7 +49,7 @@ function Navbar() {
                         <motion.a
                             key={link.label}
                             href={link.href}
-                            className="text-primary-600 hover:text-primary-900 font-medium transition-colors duration-300"
+                            className="text-brand-900 hover:text-brand-600 font-medium transition-colors duration-300 text-sm tracking-wide"
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 * index }}
@@ -61,8 +61,8 @@ function Navbar() {
 
                 {/* CTA Button */}
                 <div className="hidden md:block">
-                    <Button variant="secondary" size="sm">
-                        Get Started
+                    <Button variant="primary" size="sm" className="shadow-lg shadow-brand-900/10">
+                        Book a Demo
                     </Button>
                 </div>
 
@@ -87,14 +87,14 @@ function Navbar() {
                         <a
                             key={link.label}
                             href={link.href}
-                            className="text-primary-600 hover:text-primary-900 font-medium py-2"
+                            className="text-primary-600 hover:text-brand-600 font-medium py-2"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             {link.label}
                         </a>
                     ))}
-                    <Button variant="primary" size="sm" className="mt-2 text-white">
-                        Get Started
+                    <Button variant="primary" size="sm" className="mt-2 w-full">
+                        Book a Demo
                     </Button>
                 </div>
             </motion.div>

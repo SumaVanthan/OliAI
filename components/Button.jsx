@@ -4,22 +4,16 @@ import { motion } from 'framer-motion';
 const variants = {
     primary: `
         relative overflow-hidden
-        bg-primary-900 text-white
-        border border-primary-900
-        hover:shadow-lg hover:shadow-primary-900/20
-        shimmer-btn
+        btn-primary-theme
+        font-bold tracking-wide
     `,
     secondary: `
-        bg-white text-primary-900
-        border border-primary-200
-        hover:bg-primary-50
-        hover:border-primary-300
-        shadow-sm hover:shadow
+        btn-secondary-theme
     `,
     glass: `
-        bg-white/80 text-primary-900
+        bg-white/80 text-brand-900
         backdrop-blur-md
-        border border-primary-200
+        border border-brand-200
         hover:bg-white
         hover:shadow-md
     `

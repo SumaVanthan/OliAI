@@ -1,184 +1,269 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Phone } from 'lucide-react';
+import { Play, Pause, RefreshCw, Volume2, Globe, ArrowRight } from 'lucide-react';
+import Button from './Button.jsx';
 
-const features = [
-    {
-        title: 'Instant Interruption Handling',
-        description: 'Change the topic mid-sentence. OliAI keeps up.'
+// Demo Data
+const demos = {
+    us: {
+        label: "US English",
+        flag: "🇺🇸",
+        scenarios: [
+            {
+                id: 'sales',
+                title: 'Sales Qualification',
+                text: "Hi there! I'm calling from Oli AI. I noticed you downloaded our whitepaper on voice automation. Just wanted to see if you had any questions about how it could scale your support team?"
+            },
+            {
+                id: 'support',
+                title: 'Tech Support',
+                text: "Thanks for calling Support. I see you're experiencing latency issues with your dashboard. I can reset that session for you right now—would you like me to go ahead?"
+            }
+        ]
     },
-    {
-        title: 'Background Noise Filter',
-        description: 'Crystal clear voice isolation, even in busy environments.'
+    uk: {
+        label: "UK English",
+        flag: "🇬🇧",
+        scenarios: [
+            {
+                id: 'banking',
+                title: 'Banking Security',
+                text: "Good afternoon. This is a fraud alert from Heritage Bank. We've noticed an unusual transaction of £500. Could you please confirm if this was you?"
+            },
+            {
+                id: 'appointment',
+                title: 'Appointment Booking',
+                text: "Hello! I'm calling to reschedule your consultation for tomorrow. We have a slot available at 2 PM or 4 PM. Which one would suit you better?"
+            }
+        ]
     },
-    {
-        title: 'Emotional Intelligence',
-        description: 'Detects tone and adapts responses accordingly.'
+    india: {
+        label: "Indian English",
+        flag: "🇮🇳",
+        scenarios: [
+            {
+                id: 'ecommerce',
+                title: 'Order Status',
+                text: "Namaste! I'm checking on your order #4521. It is out for delivery and should reach you by 6 PM today. Do you need the delivery agent's number?"
+            },
+            {
+                id: 'feedback',
+                title: 'Feedback Collection',
+                text: "Hi, thank you for using our service yesterday. On a scale of 1 to 10, how would you rate your experience with our technician?"
+            }
+        ]
     }
-];
-
-const conversation = [
-    {
-        role: 'ai',
-        text: "जी हाँ, मैं आपके होम लोन रिन्यूअल में जरूर मदद कर सकता हूँ। मुझे दिख रहा है कि आप 4.2% फिक्स्ड रेट के लिए एलिजिबल हैं। क्या आप चाहेंगे कि मैं ये रेट आपके लिए लॉक कर दूँ?"
-    },
-    {
-        role: 'user',
-        text: "रुकिए, एक मिनट... अभी वेरिएबल रेट क्या चल रहा है?"
-    },
-    {
-        role: 'ai',
-        text: "बहुत अच्छा सवाल! अभी वेरिएबल रेट प्राइम से 0.5% कम है। मार्केट का ट्रेंड देखते हुए ज्यादातर कस्टमर फिक्स्ड रेट ले रहे हैं, लेकिन फाइनल डिसीजन आपका है!"
-    }
-];
+};
 
 function LiveDemo() {
-    const [visibleMessages, setVisibleMessages] = useState([0]);
+    const [activeRegion, setActiveRegion] = useState('us');
+    const [activeScenarioIndex, setActiveScenarioIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
 
+    // Reset when changing region/scenario
     useEffect(() => {
-        // Auto-play conversation on mount
-        const timers = [];
-        conversation.forEach((_, index) => {
-            if (index > 0) {
-                timers.push(setTimeout(() => {
-                    setVisibleMessages(prev => [...prev, index]);
-                }, index * 2000));
-            }
-        });
-        return () => timers.forEach(clearTimeout);
-    }, []);
+        setIsPlaying(false);
+        setProgress(0);
+    }, [activeRegion, activeScenarioIndex]);
+
+    // Simulated Audio Progress
+    useEffect(() => {
+        let interval;
+        if (isPlaying) {
+            interval = setInterval(() => {
+                setProgress(prev => {
+                    if (prev >= 100) {
+                        setIsPlaying(false);
+                        return 0;
+                    }
+                    return prev + 1; // Speed of playback simulation
+                });
+            }, 50);
+        }
+        return () => clearInterval(interval);
+    }, [isPlaying]);
+
+    const activeDemo = demos[activeRegion];
+    const scenario = activeDemo.scenarios[activeScenarioIndex];
 
     return (
-        <section id="demo" className="py-24 relative overflow-hidden">
-            {/* Subtle Background Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-blue-50/30 to-primary-50 pointer-events-none"></div>
+        <section id="demo" className="py-24 relative overflow-hidden bg-sage-100">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                    {/* Left Column - Content */}
+                    {/* Left Content */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        <span className="inline-block text-accent-600 text-sm font-bold tracking-wider uppercase mb-4">
-                            Live Demo
-                        </span>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-sm font-semibold mb-6">
+                            <Volume2 className="w-4 h-4" />
+                            <span>Interactive Demo</span>
+                        </div>
 
-                        <h2 className="font-heading font-bold text-4xl md:text-5xl lg:text-6xl text-primary-900 mb-6 leading-tight">
-                            Experience the
-                            <br />
-                            <span className="text-accent-600">human touch.</span>
+                        <h2 className="font-heading font-bold text-4xl md:text-5xl text-primary-900 mb-6 leading-tight">
+                            Hear the difference
+                            <span className="text-gradient-primary"> human-like AI</span> makes.
                         </h2>
 
-                        <p className="text-lg text-primary-600 mb-10 max-w-lg">
-                            No more "Press 1 for Sales". OliAI handles complex queries, interruptions, and
-                            digressions with grace. It feels just like talking to your best agent.
+                        <p className="text-lg text-primary-600 mb-8 max-w-lg leading-relaxed">
+                            Experience voice AI that understands context, handles interruptions, and speaks with genuine local accents. Pick a region and listen for yourself.
                         </p>
 
-                        {/* Feature List */}
-                        <div className="space-y-5">
-                            {features.map((feature, index) => (
-                                <motion.div
-                                    key={feature.title}
-                                    className="flex items-start gap-4"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                >
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-accent-500 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Check className="w-4 h-4 text-white" strokeWidth={3} />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-heading font-semibold text-primary-900 mb-1">
-                                            {feature.title}
-                                        </h4>
-                                        <p className="text-primary-500 text-sm">
-                                            {feature.description}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            ))}
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-2 text-primary-800 font-medium">
+                                <CheckCircleItem text="Sub-second latency (feels instant)" />
+                            </div>
+                            <div className="flex items-center gap-2 text-primary-800 font-medium">
+                                <CheckCircleItem text="Native accents & regional dialects" />
+                            </div>
+                            <div className="flex items-center gap-2 text-primary-800 font-medium">
+                                <CheckCircleItem text="Handles interruptions naturally" />
+                            </div>
+                        </div>
+
+                        <div className="mt-10">
+                            <Button variant="secondary" size="lg" icon={ArrowRight} iconPosition="right">
+                                Book a Tailored Demo
+                            </Button>
                         </div>
                     </motion.div>
 
-                    {/* Right Column - Chat Interface */}
+                    {/* Right Interactive Player */}
                     <motion.div
                         className="relative"
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        {/* Chat Card */}
-                        <div className="bg-primary-900 rounded-3xl p-6 md:p-8 shadow-2xl shadow-primary-900/20">
-                            {/* Header */}
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-accent-600 flex items-center justify-center">
-                                        <span className="text-white font-heading font-bold">O</span>
-                                    </div>
-                                    <div>
-                                        <h4 className="text-white font-heading font-semibold">OliAI Assistant</h4>
-                                        <div className="flex items-center gap-1.5">
-                                            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                                            <span className="text-green-400 text-xs font-medium">Online</span>
-                                        </div>
-                                    </div>
+                        <div className="relative z-10 bg-primary-900 rounded-3xl overflow-hidden shadow-2xl shadow-primary-900/20 border border-primary-800">
+
+                            {/* Player Header / Region Tabs */}
+                            <div className="flex items-center justify-between p-2 bg-primary-950/50 backdrop-blur-sm border-b border-primary-800">
+                                <div className="flex p-1 gap-1">
+                                    {Object.entries(demos).map(([key, data]) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => setActiveRegion(key)}
+                                            className={`
+                                                flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all
+                                                ${activeRegion === key
+                                                    ? 'bg-primary-800 text-white shadow-md'
+                                                    : 'text-primary-400 hover:text-white hover:bg-primary-800/50'}
+                                            `}
+                                        >
+                                            <span className="text-lg">{data.flag}</span>
+                                            {data.label}
+                                        </button>
+                                    ))}
                                 </div>
-                                <span className="text-primary-400 text-sm font-mono">00:42</span>
                             </div>
 
-                            {/* Messages */}
-                            <div className="space-y-4 min-h-[280px]">
-                                <AnimatePresence>
-                                    {conversation.map((message, index) => (
-                                        visibleMessages.includes(index) && (
+                            {/* Main Player Area */}
+                            <div className="p-8 md:p-10 flex flex-col items-center text-center">
+
+                                {/* Visualizer Circle */}
+                                <div className="relative mb-8 group">
+                                    <div className={`absolute inset-0 bg-mint rounded-full blur-2xl transition-opacity duration-300 ${isPlaying ? 'opacity-40 animate-pulse' : 'opacity-10'}`}></div>
+                                    <button
+                                        onClick={() => setIsPlaying(!isPlaying)}
+                                        className="relative w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/30 transition-transform active:scale-95 hover:scale-105"
+                                    >
+                                        {isPlaying ? (
+                                            <Pause className="w-10 h-10 text-white fill-current" />
+                                        ) : (
+                                            <Play className="w-10 h-10 text-white fill-current ml-1" />
+                                        )}
+                                    </button>
+
+                                    {/* Progress Ring (SVG) */}
+                                    <svg className="absolute top-0 left-0 w-24 h-24 -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+                                        <circle
+                                            cx="50" cy="50" r="46"
+                                            fill="none"
+                                            stroke="rgba(255,255,255,0.1)"
+                                            strokeWidth="2"
+                                        />
+                                        <circle
+                                            cx="50" cy="50" r="46"
+                                            fill="none"
+                                            stroke="#38bdf8"
+                                            strokeWidth="2"
+                                            strokeDasharray="289"
+                                            strokeDashoffset={289 - (289 * progress) / 100}
+                                            className="transition-all duration-100 ease-linear"
+                                        />
+                                    </svg>
+                                </div>
+
+                                {/* Scenario Selector */}
+                                <div className="space-y-4 w-full max-w-sm">
+                                    <div className="flex justify-center gap-2 mb-4">
+                                        {activeDemo.scenarios.map((s, idx) => (
+                                            <button
+                                                key={s.id}
+                                                onClick={() => setActiveScenarioIndex(idx)}
+                                                className={`h-2 rounded-full transition-all ${idx === activeScenarioIndex ? 'w-8 bg-brand-500' : 'w-2 bg-primary-700 hover:bg-primary-600'}`}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <div className="min-h-[120px]">
+                                        <AnimatePresence mode='wait'>
                                             <motion.div
-                                                key={index}
-                                                className={`${message.role === 'user' ? 'ml-4' : ''}`}
+                                                key={`${activeRegion}-${activeScenarioIndex}`}
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.3 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
                                             >
-                                                {message.role === 'ai' ? (
-                                                    <p className="text-primary-200 leading-relaxed">
-                                                        "{message.text}"
-                                                    </p>
-                                                ) : (
-                                                    <div className="bg-primary-800 rounded-2xl px-4 py-3 inline-block">
-                                                        <p className="text-white">
-                                                            "{message.text}"
-                                                        </p>
-                                                    </div>
-                                                )}
+                                                <h3 className="text-primary-200 text-sm font-medium uppercase tracking-wider mb-2">
+                                                    {scenario.title}
+                                                </h3>
+                                                <p className="text-xl md:text-2xl text-white font-heading font-medium leading-relaxed">
+                                                    "{scenario.text}"
+                                                </p>
                                             </motion.div>
-                                        )
-                                    ))}
-                                </AnimatePresence>
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            {/* CTA */}
-                            <motion.button
-                                className="mt-6 w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-white/10 text-white font-heading font-semibold hover:bg-white/20 transition-colors"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Test Live Call
-                                <Phone className="w-4 h-4" />
-                            </motion.button>
+                            {/* Footer Status */}
+                            <div className="px-6 py-4 bg-primary-950/30 border-t border-primary-800 flex items-center justify-between text-xs font-mono text-primary-400">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                    AI Online
+                                </div>
+                                <span>Voice Model v2.4</span>
+                            </div>
+
                         </div>
 
-                        {/* Decorative Gradient Blur */}
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-accent-400/20 rounded-full blur-3xl pointer-events-none"></div>
-                        <div className="absolute -top-10 -left-10 w-32 h-32 bg-indigo-400/20 rounded-full blur-3xl pointer-events-none"></div>
+                        {/* Decorative */}
+                        <div className="absolute -top-10 -right-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                        <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     </motion.div>
                 </div>
             </div>
         </section>
+    );
+}
+
+function CheckCircleItem({ text }) {
+    return (
+        <div className="flex items-center gap-3">
+            <div className="w-5 h-5 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0">
+                <svg className="w-3 h-3 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <span>{text}</span>
+        </div>
     );
 }
 
