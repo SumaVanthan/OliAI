@@ -37,9 +37,7 @@ function Navbar() {
                     className="flex items-center gap-2"
                     whileHover={{ scale: 1.02 }}
                 >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
-                        <span className="text-white font-heading font-bold text-lg">O</span>
-                    </div>
+                    <img src="/images/logos/oli logo.png" alt="Oli AI" className="h-10 w-auto object-contain" />
                     <span className="font-heading font-bold text-xl text-primary-900 tracking-tight">Oli AI</span>
                 </motion.a>
 
